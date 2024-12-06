@@ -1,0 +1,13 @@
+# Ignorar todas las claves SSH
+**/ssh/*_key
+**/ssh/*_key.pub
+**/ssh/authorized_keys
+**/ssh/config
+
+# Ignorar volúmenes de Docker
+jenkins_home/
+web_content/
+
+# Otros archivos temporales
+*.log
+.DS_Store
