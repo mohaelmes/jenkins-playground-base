@@ -19,8 +19,8 @@ Este proyecto configura un cluster de Jenkins con un master, dos agentes y un se
 
 1. Clonar el repositorio:
    ```bash
-   git clone <url-del-repositorio>
-   cd jenkins-cluster
+   git clone https://github.com/Cloud-DevOps-Labs/jenkins-playground-base
+   cd jenkins-playground-base
    ```
 
 2. Ejecutar el script de configuración (genera las claves SSH):
@@ -53,12 +53,19 @@ Este proyecto configura un cluster de Jenkins con un master, dos agentes y un se
 1. Ir a "Manage Jenkins" > "Manage Credentials"
 2. Click en "(global)" bajo "Stores scoped to Jenkins"
 3. Click en "Add Credentials"
-4. Configurar la credencial:
+4. Configurar la credencial de los agentes de jenkins:
    - Kind: "SSH Username with private key"
    - ID: `jenkins-agent-key`
    - Description: `Jenkins Agent SSH Key`
    - Username: `jenkins`
    - Private Key: Enter directly y pegar el contenido de `jenkins-master/ssh/jenkins_agent_key`
+   - Click "Create"
+5. Configurar la credencial del servidor web NGINX:
+   - Kind: "SSH Username with private key"
+   - ID: `webserver-key`
+   - Description: `Nginx Web Server SSH Key`
+   - Username: `root`
+   - Private Key: Enter directly y pegar el contenido de `jenkins-master/ssh/nginx_key`
    - Click "Create"
 
 ### Paso 2: Configurar el Primer Agente (jenkins-agent1)
@@ -70,7 +77,7 @@ Este proyecto configura un cluster de Jenkins con un master, dos agentes y un se
    - Click "Create"
 4. Configuración del nodo:
    - Remote root directory: `/home/jenkins/agent`
-   - Labels: `docker`
+   - Labels: `jenkins-agent`
    - Launch method: "Launch agents via SSH"
    - Host: `jenkins-agent1`
    - Credentials: Seleccionar la credencial SSH creada anteriormente
@@ -83,6 +90,39 @@ Este proyecto configura un cluster de Jenkins con un master, dos agentes y un se
   - Host: `jenkins-agent2`
   - El resto de la configuración igual que jenkins-agent1
 
+### Paso 4: Configurar Pipeline desde SCM
+
+1. En Jenkins, crear un nuevo Pipeline:
+   - Click en "New Item"
+   - Nombre: `playground-app`
+   - Seleccionar "Pipeline"
+   - Click "OK"
+
+2. En la configuración del pipeline:
+   - En la sección "Pipeline", seleccionar "Pipeline script from SCM"
+   - SCM: Git
+   - Repository URL: `https://github.com/Cloud-DevOps-Labs/jenkins-playground-app.git`
+   - Branch Specifier: `*/main`
+   - Script Path: `Jenkinsfile`
+   - Click "Save"
+
+### Paso 5: Ejecutar el Pipeline
+
+En una pestaña del navegador accedemos a localhost:80 y veremos la página por defecto de nginx.
+
+1. Ir al proyecto `playground-app`
+2. Click en "Build Now"
+
+El pipeline:
+- Clonará el repositorio
+- Instalará las dependencias de Node.js
+- Construirá la aplicación
+- Ejecutará pruebas básicas
+- Desplegará en el servidor Nginx
+
+Una vez finalizado el despliegue podremos ver un hola mundo con la fecha actual.
+
+
 ## Verificación de Agentes
 
 Para verificar que los agentes están funcionando:
@@ -91,6 +131,26 @@ Para verificar que los agentes están funcionando:
    ```bash
    docker exec jenkins-master ssh -i /var/jenkins_home/.ssh/jenkins_agent_key jenkins@jenkins-agent1
    docker exec jenkins-master ssh -i /var/jenkins_home/.ssh/jenkins_agent_key jenkins@jenkins-agent2
+   ```
+
+### Problemas de Compilación
+Si hay problemas al compilar con Node.js:
+1. Verificar que Node.js y npm están instalados en los agentes:
+   ```bash
+   docker exec jenkins-agent1 node --version
+   docker exec jenkins-agent1 npm --version
+   ```
+2. Verificar que el plugin de Node.js está instalado en Jenkins y configurado correctamente
+
+### Problemas con el Servidor Nginx
+1. Verificar que Nginx está corriendo:
+   ```bash
+   docker exec nginx-web nginx -t
+   docker exec nginx-web service nginx status
+   ```
+2. Verificar los permisos de las claves SSH para el despliegue:
+   ```bash
+   docker exec nginx-web ls -la /root/.ssh
    ```
 
 ## Mantenimiento
