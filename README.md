@@ -36,8 +36,18 @@ Este proyecto configura un cluster de Jenkins con un master, dos agentes y un se
 
 4. Iniciar los servicios:
    ```bash
+
+   # en segundo plano
    docker compose up -d
+
+   # En primer plano, deberemos abrir un segundo terminal para lanzar el resto de comandos
+   docker compose up
    ```
+
+Para ver los logs:
+```bash
+docker compose logs -f
+```
 
 ## Acceso a Jenkins
 
@@ -153,7 +163,14 @@ Si hay problemas al compilar con Node.js:
    docker exec nginx-web ls -la /root/.ssh
    ```
 
-## Mantenimiento
+## Mantenimiento y cierre de la práctica:
+
+Si existen problemas para borrar las credenciales del directorio de nginx, es debido a que el directorio se ha traspasado al usuario root.
+Con este comando se pueden restaurar antes de borrar:
+
+```bash
+sudo chown -R $USER:$USER $(pwd)/nginx/ssh
+```
 
 Para detener los servicios:
 ```bash
@@ -162,60 +179,9 @@ docker compose down
 
 Para limpiar todo el entorno:
 ```bash
+chmod +x clean.sh
 ./clean.sh --all
 ```
-
-Para ver los logs:
-```bash
-docker compose logs -f
-```
-
-## Solución de Problemas
-
-### Problemas de Permisos SSH
-Verificar permisos en los agentes:
-```bash
-docker exec jenkins-agent1 ls -la /home/jenkins/.ssh
-docker exec jenkins-agent1 ls -la /home/jenkins/agent
-```
-
-Los permisos correctos deben ser:
-- Directorio .ssh: 700
-- authorized_keys: 644
-- Directorio agent: 755
-
-### Problemas de Conexión
-Verificar la conectividad SSH:
-```bash
-docker exec jenkins-master ssh -vvv -i /var/jenkins_home/.ssh/jenkins_agent_key jenkins@jenkins-agent1
-```
-
-### Verificar Versiones de Java
-```bash
-docker exec jenkins-agent1 java -version
-docker exec jenkins-agent2 java -version
-```
-Ambos agentes deben mostrar OpenJDK 17.
-
-### Problemas de Compilación
-Si hay problemas al compilar con Node.js:
-1. Verificar que Node.js y npm están instalados en los agentes:
-   ```bash
-   docker exec jenkins-agent1 node --version
-   docker exec jenkins-agent1 npm --version
-   ```
-2. Verificar que el plugin de Node.js está instalado en Jenkins y configurado correctamente
-
-### Problemas con el Servidor Nginx
-1. Verificar que Nginx está corriendo:
-   ```bash
-   docker exec nginx-web nginx -t
-   docker exec nginx-web service nginx status
-   ```
-2. Verificar los permisos de las claves SSH para el despliegue:
-   ```bash
-   docker exec nginx-web ls -la /root/.ssh
-   ```
 
 ## Notas de Seguridad
 
