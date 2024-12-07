@@ -180,8 +180,14 @@ docker compose down
 Para limpiar todo el entorno:
 ```bash
 chmod +x clean.sh
-./clean.sh --all
+sudo ./clean.sh --all
 ```
+
+Nota:
+
+El uso de sudo en el script de limpiado es necesario para el manejo de las claves ssh del contenedor de nginx.
+Para evitarlo se puede cambiar el owner del directorio: nginx/ssh  y luego lanzar el script sin permisos.
+
 
 ## Notas de Seguridad
 
