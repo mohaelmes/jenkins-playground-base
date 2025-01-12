@@ -28,13 +28,22 @@ Este proyecto configura un cluster de Jenkins con un master, dos agentes y un se
    chmod +x setup.sh
    ./setup.sh
    ```
+![image](https://github.com/user-attachments/assets/6fab429f-22b2-477a-8b31-55e997aed684)
+![image](https://github.com/user-attachments/assets/27760f96-582a-4995-8230-5e3d63a4ae86)
+
 
 3. Construir las imágenes:
    ```bash
    docker compose build
    ```
+   ![image](https://github.com/user-attachments/assets/7ddfeeb8-b795-4160-ab21-7801e63b42ae)
+   ![image](https://github.com/user-attachments/assets/fb2151fa-af20-4cfe-b38b-9f6e0cae4f71)
 
-4. Iniciar los servicios:
+
+
+
+
+5. Iniciar los servicios:
    ```bash
 
    # en segundo plano
@@ -70,6 +79,8 @@ docker compose logs -f
    - Username: `jenkins`
    - Private Key: Enter directly y pegar el contenido de `jenkins-master/ssh/jenkins_agent_key`
    - Click "Create"
+   ![image](https://github.com/user-attachments/assets/4b6cbcfc-b18e-450c-9437-51d1a9207d53)
+
 5. Configurar la credencial del servidor web NGINX:
    - Kind: "SSH Username with private key"
    - ID: `webserver-key`
@@ -77,6 +88,7 @@ docker compose logs -f
    - Username: `root`
    - Private Key: Enter directly y pegar el contenido de `jenkins-master/ssh/nginx_key`
    - Click "Create"
+![image](https://github.com/user-attachments/assets/437e0c21-a4eb-4531-8465-9e7bd6326855)
 
 ### Paso 2: Configurar el Primer Agente (jenkins-agent1)
 1. Ir a "Manage Jenkins" > "Manage Nodes and Clouds"
