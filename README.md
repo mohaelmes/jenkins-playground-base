@@ -28,11 +28,13 @@ Este proyecto configura un cluster de Jenkins con un master, dos agentes y un se
    chmod +x setup.sh
    ./setup.sh
    ```
+![image](https://github.com/user-attachments/assets/49051881-12b0-4ad0-a386-643588386519)
 
 3. Construir las imágenes:
    ```bash
    docker compose build
    ```
+![image](https://github.com/user-attachments/assets/dc4a0cd0-64fe-4670-be4f-54a73c65f898)
 
 4. Iniciar los servicios:
    ```bash
@@ -48,6 +50,7 @@ Para ver los logs:
 ```bash
 docker compose logs -f
 ```
+![image](https://github.com/user-attachments/assets/f4d49688-3a47-4c8a-8b6d-4876ee59f2a5)
 
 ## Acceso a Jenkins
 
@@ -56,6 +59,7 @@ docker compose logs -f
    ```bash
    docker exec jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword
    ```
+![image](https://github.com/user-attachments/assets/b478c8e5-aaea-4179-bd2d-180a7d762e21)
 
 ## Configuración de los Agentes Jenkins
 
