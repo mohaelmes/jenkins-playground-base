@@ -81,6 +81,7 @@ docker compose logs -f
    - Username: `root`
    - Private Key: Enter directly y pegar el contenido de `jenkins-master/ssh/nginx_key`
    - Click "Create"
+![image](https://github.com/user-attachments/assets/5ab6d5a0-3c9e-4f45-9be6-7a6302f6219f)
 
 ### Paso 2: Configurar el Primer Agente (jenkins-agent1)
 1. Ir a "Manage Jenkins" > "Manage Nodes and Clouds"
