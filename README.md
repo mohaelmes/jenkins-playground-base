@@ -105,6 +105,8 @@ docker compose logs -f
   - Host: `jenkins-agent2`
   - El resto de la configuración igual que jenkins-agent1
 
+![image](https://github.com/user-attachments/assets/7bffe169-ea8c-42d4-88b8-69aa68a7befc)
+
 ### Paso 4: Configurar Pipeline desde SCM
 
 1. En Jenkins, crear un nuevo Pipeline:
@@ -120,6 +122,8 @@ docker compose logs -f
    - Branch Specifier: `*/main`
    - Script Path: `Jenkinsfile`
    - Click "Save"
+
+![image](https://github.com/user-attachments/assets/1b31b2dd-45f8-4e1d-95c9-2d9ceea9b0e2)
 
 ### Paso 5: Ejecutar el Pipeline
 
